@@ -10,11 +10,10 @@ app.use(bodyParser.json());
 
 
 // === store == //
-var todoItems = [];
-todoItems.push({ index: 1, value: "learn react", done: false });
-todoItems.push({ index: 2, value: "Go shopping", done: true });
-todoItems.push({ index: 3, value: "buy flowers", done: true });
-var index = 5;
+const todoItems = [];
+todoItems.push({ value: 'learn react', done: false });
+todoItems.push({ value: 'Go shopping', done: true });
+todoItems.push({ value: 'buy flowers', done: true });
 
 
 // === endpoints == //
@@ -23,30 +22,29 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 // get all tasks
 app.get('/task', (req, res) => {
-    return res.json({ data: todoItems, status: "success" })
+    return res.json({ data: todoItems })
 })
 
 // create a task
 app.post('/task', (req, res) => {
     todoItems.push({
-        index: index++,
         value: req.body.value,
         done: false,
     })
-    return res.json({ data: todoItems, status: 'success' })
+    return res.json({ data: todoItems })
 })
 
 // delete a task
 app.delete('/task/:id', (req, res) => {
-    var todoItems = todoItems.filter(d => d.index != +req.params.id)
-    return res.json({ data: todoItems, status: 'success' })
+    todoItems.splice(req.params.id, 1)
+    return res.json({ data: todoItems })
 })
 
 // update a task
-app.patch('/task/:id', (req, res) => {
-    todoItems.filter(d => d.index == +req.params.id)[0].done = req.body.done
-    return res.json({ data: todoItems, status: 'success' })
+app.put('/task/:id', (req, res) => {
+    todoItems.at(req.params.id).done = req.body.done
+    return res.json({ data: todoItems })
 })
 
 // === run app == //
-app.listen(8000, () => console.log(`Example app running!`))
+app.listen(3000, () => console.log('Example app running!'))
